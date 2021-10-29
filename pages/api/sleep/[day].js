@@ -1,5 +1,12 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import sleepData from "../../../data/sleep.json";
+import path from "path";
+import fs from "fs"
+
+const sleepJsonPath = path.resolve("data/sleep.json");
+console.log(sleepJsonPath)
+let sleepData = fs.existsSync(sleepJsonPath)
+  ? JSON.parse(fs.readFileSync(sleepJsonPath))
+  : [];
 
 export default function handler(req, res) {
   const { day: dateKey } = req.query;

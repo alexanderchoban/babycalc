@@ -3,10 +3,6 @@ import path from "path";
 import fs from "fs"
 
 const sleepJsonPath = path.resolve("data/sleep.json");
-console.log(sleepJsonPath)
-let sleepData = fs.existsSync(sleepJsonPath)
-  ? JSON.parse(fs.readFileSync(sleepJsonPath))
-  : [];
 
 export default function handler(req, res) {
   const { day: dateKey } = req.query;
@@ -20,6 +16,10 @@ export default function handler(req, res) {
 
 function calcWakeTime(month, day, year) {
   const dateFilter = `${month}/${day}/${year}`;
+
+  let sleepData = fs.existsSync(sleepJsonPath)
+  ? JSON.parse(fs.readFileSync(sleepJsonPath))
+  : [];
 
   // filter date from data
   let datesNaps = sleepData.filter((x) => x.date === dateFilter);

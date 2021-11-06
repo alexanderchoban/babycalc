@@ -40,21 +40,28 @@ export default function Home() {
 
       {day !== "XXXXXXXX" && (
         <main className={styles.main}>
-          <h1 className={styles.title}>Day: {`${month}/${date}/${year}`}</h1>
+          <h1 className={styles.title}>{`${month}/${date}/${year}`}</h1>
           {!data.loading && (
             <>
               <h2>
-                {new Date(data.wakeWindow.dayStart).toLocaleTimeString()} to{" "}
-                {new Date(data.wakeWindow.dayEnd).toLocaleTimeString()}
+                {new Date(data.wakeWindow.dayStart).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}{" "}
+                to{" "}
+                {new Date(data.wakeWindow.dayEnd).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </h2>
-              <p>
-                <h3>
-                  <em>Hours:</em>{" "}
-                  {Number.parseFloat(data.wakeWindow.totalHours, 3).toPrecision(
-                    2
-                  )}
-                </h3>
-              </p>
+              <h3>
+                <em>Wake Hours:</em>{" "}
+                {Number.parseFloat(data.wakeWindow.totalHours, 3).toPrecision(
+                  2
+                )}
+              </h3>
+
+              <h2 style={{ paddingTop: "50px" }}>Nap Times &amp; Lengths</h2>
               <table>
                 <thead>
                   <th>Start</th>
@@ -64,9 +71,21 @@ export default function Home() {
                 <tbody>
                   {data.wakeWindow.naps.map((n, index) => (
                     <tr key={index}>
-                      <td>{new Date(n.time).toLocaleTimeString()}</td>
-                      <td>{n.duration > 0 ? new Date(n.end).toLocaleTimeString() : ''}</td>
-                      <td align="right">{n.duration > 0 ? n.duration : ''}</td>
+                      <td>
+                        {new Date(n.time).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </td>
+                      <td>
+                        {n.duration > 0
+                          ? new Date(n.end).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
+                          : ""}
+                      </td>
+                      <td align="right">{n.duration > 0 ? n.duration : ""}</td>
                     </tr>
                   ))}
                 </tbody>

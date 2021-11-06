@@ -23,8 +23,8 @@ export default function Home() {
   const date = parseInt(day.substring(6, 8));
 
   const updateData = () => {
-    fetch(`/api/update`)
-  }
+    fetch(`/api/update`);
+  };
 
   return (
     <div className={styles.container}>
@@ -54,7 +54,23 @@ export default function Home() {
                     2
                   )}
                 </h3>
-              </p>{" "}
+              </p>
+              <table>
+                <thead>
+                  <th>Start</th>
+                  <th>End</th>
+                  <th>Duration (Minutes)</th>
+                </thead>
+                <tbody>
+                  {data.wakeWindow.naps.map((n, index) => (
+                    <tr key={index}>
+                      <td>{new Date(n.time).toLocaleTimeString()}</td>
+                      <td>{n.duration > 0 ? new Date(n.end).toLocaleTimeString() : ''}</td>
+                      <td align="right">{n.duration > 0 ? n.duration : ''}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </>
           )}
         </main>

@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import path from "path";
-import fs from "fs"
+import fs from "fs";
 
 const sleepJsonPath = path.resolve("data/sleep.json");
 
@@ -18,8 +18,8 @@ function calcWakeTime(month, day, year) {
   const dateFilter = `${month}/${day}/${year}`;
 
   let sleepData = fs.existsSync(sleepJsonPath)
-  ? JSON.parse(fs.readFileSync(sleepJsonPath))
-  : [];
+    ? JSON.parse(fs.readFileSync(sleepJsonPath))
+    : [];
 
   // filter date from data
   let datesNaps = sleepData.filter((x) => x.date === dateFilter);
@@ -55,7 +55,13 @@ function calcWakeTime(month, day, year) {
   const totalHours =
     datesNaps
       .filter((x) => x.time >= dayStart && x.end <= dayEnd)
-      .reduce((sum, { duration }) => {
+      .reduce((sum, { duration, time }) => {
+        if (duration === 0) {
+          const sleepMs = now.getTime() - new Date(time).getTime();
+          const sleepMin = sleepMs / 60000;
+          return sum - sleepMin;
+        }
+
         return sum - duration;
       }, diffMin) / 60;
 
